@@ -40,7 +40,7 @@ This project focuses on shifting from passive monitoring to active cyber-defense
 
 ## 📐 Architecture & Logic
 ### Lab Architecture
-<img width="821" height="1031" alt="SOC-Lab-Architecture" src="https://github.com/user-attachments/assets/c56beae1-c8f5-427d-bfd4-05f643be6cef" />
+<img width="821" height="1031" alt="SOC-Lab-Architecture" src="https://github.com/user-attachments/assets/a3014130-f351-4999-9d73-99e5c955d616" />
 
 
 ### Threat Flow (Logical Mitigation)
