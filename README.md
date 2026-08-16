@@ -40,10 +40,14 @@ This project focuses on shifting from passive monitoring to active cyber-defense
 
 ## 📐 Architecture & Logic
 ### Lab Architecture
+<img width="821" height="1031" alt="SOC-Lab-Architecture" src="https://github.com/user-attachments/assets/a66e78c5-f890-4084-b2ed-166030552bdc" />
 
 ### Threat Flow (Logical Mitigation)
+<img width="448" height="600" alt="SOAR-pipeline-logic-process" src="https://github.com/user-attachments/assets/e8adea6c-0381-4d2a-9fb8-4ef1a651451c" />
+
 
 ### SOAR Pipeline
+<img width="538" height="334" alt="SOAR-pipeline" src="https://github.com/user-attachments/assets/c87b1887-26d0-43c7-9a38-3859ecb5be6c" />
 
 
 ## 📋 How It Works (Example)
