@@ -15,7 +15,7 @@ This scenario simulates a **dictionary-based SSH bruteforce attack** originating
 
 | Attribute | Value |
 |-----------|-------|
-| **Attack Tool** | THC-Hydra |
+| **Attack Tool** | Hydra |
 | **Attack Vector** | SSH Service (Port 22) |
 | **Attacker IP** | `192.168.20.152` (Kali Linux) |
 | **Target IP** | `192.168.20.151` (Ubuntu Server) |
@@ -29,9 +29,8 @@ This scenario simulates a **dictionary-based SSH bruteforce attack** originating
 ## 🔧 Zabbix Configuration
 
 ### Item: Capture malicious IP from /var/log/auth.log
-
-![Zabbix Item Configuration - Auth Log Monitoring](https://github.com/user-attachments/assets/8c24c5b1-3b71-43ec-adb6-7dc7a5e8f1f5)  
-*Figure 7.1 – Configuration of the item monitoring auth.log*
+ 
+<img width="1111" height="595" alt="Zabbix Item Configuration - Auth Log Monitoring" src="https://github.com/user-attachments/assets/d01bc01e-645c-4771-b68f-a3b12bfb7710" />
 
 **Item Configuration:**
 - **Type:** Zabbix Agent (Active)
@@ -41,8 +40,7 @@ This scenario simulates a **dictionary-based SSH bruteforce attack** originating
 
 ### Trigger: SSH-Bruteforce Detected
 
-![Zabbix Trigger Configuration - SSH Bruteforce](https://github.com/user-attachments/assets/3b9b74b9-70a8-4bda-906c-889a150745a0)  
-*Figure 7.2 – Configuration of the SSH Bruteforce trigger*
+<img width="1201" height="880" alt="Zabbix Trigger Configuration - SSH Bruteforce" src="https://github.com/user-attachments/assets/67564e32-3587-4fd6-9622-42abf801d568" />
 
 **Trigger Logic:**
 ```javascript
@@ -61,8 +59,8 @@ count(//var/log/auth.log, "Failed password", "10s") > 5
 
 ### Execution from Kali Linux
 
-![Kali Linux - Hydra SSH Bruteforce Attack](https://github.com/user-attachments/assets/43ae7d12-813a-4c9e-9324-8de0cdfc94a5)  
-*Figure 7.3 – Simulation of SSH bruteforce attack with Hydra from Kali Linux*
+<img width="1033" height="303" alt="Kali Linux - Hydra SSH Bruteforce Attack" src="https://github.com/user-attachments/assets/4e776646-acfe-4325-be23-7c192537cd58" />
+ 
 
 ```bash
 hydra -l client1 -P /usr/share/wordlists/rockyou.txt -t 4 ssh://192.168.20.151
@@ -80,15 +78,14 @@ hydra -l client1 -P /usr/share/wordlists/rockyou.txt -t 4 ssh://192.168.20.151
 
 ### 1. Alert Generation
 
-![Zabbix Dashboard - Problem Generation](https://github.com/user-attachments/assets/ef99097c-c054-457d-aa40-75b976daa5f8)  
-*Figure 7.4 – Problem generation in the Zabbix Dashboard*
+<img width="1282" height="816" alt="Zabbix Dashboard - Problem Generation" src="https://github.com/user-attachments/assets/2dc59201-3502-4d2e-b4fd-bba2aa2bc8d9" />
+
 
 The alert appears in the Problems Dashboard with **High** severity, confirming the SSH-Bruteforce detection on host `ubuntu-client1`.
 
 ### 2. Webhook Transmission
 
-![Zabbix Action Log - Webhook Sent](https://github.com/user-attachments/assets/7a3b6978-fd4f-4433-86e9-dbc334c9dcb1)  
-*Figure 7.5 – Zabbix action log validating webhook transmission to Shuffle*
+<img width="1424" height="747" alt="Zabbix Action Log - Webhook Sent" src="https://github.com/user-attachments/assets/cc37a128-c7fa-4b55-960c-512ed2f1b307" />
 
 **Action Log Details:**
 - **Status:** Sent ✓
@@ -99,8 +96,7 @@ The alert appears in the Problems Dashboard with **High** severity, confirming t
 
 ### 3. Shuffle Workflow Execution
 
-![Shuffle Workflow - Internal Threat Processing](https://github.com/user-attachments/assets/fa8fa6f5-a32b-48cc-a80f-4f59d81ec834)  
-*Figure 7.6 – Real-time Shuffle playbook execution during internal incident*
+<img width="999" height="658" alt="Shuffle Workflow - Internal Threat Processing" src="https://github.com/user-attachments/assets/ee941d33-f57a-4798-92c1-a6663d518ccc" />
 
 **Workflow Path:**
 1. Entry Node (Webhook) → Received ✓
@@ -112,8 +108,7 @@ The alert appears in the Problems Dashboard with **High** severity, confirming t
 
 ### 4. Execution Status
 
-![Shuffle - Execution History](https://github.com/user-attachments/assets/e21d4c56-cbc5-4a10-85b3-068e0a6016f6)  
-*Figure 7.7 – Completed workflow execution status in Shuffle history*
+<img width="934" height="339" alt="Shuffle - Execution History" src="https://github.com/user-attachments/assets/89b56bf9-cd8a-499f-b4ee-a5bc90c2178c" />
 
 **Execution Metrics:**
 - **Status:** FINISHED ✓
@@ -123,8 +118,8 @@ The alert appears in the Problems Dashboard with **High** severity, confirming t
 
 ### 5. Raw Payload Reception
 
-![Shuffle - Webhook Payload](https://github.com/user-attachments/assets/61830bd1-6c2d-49a8-975e-9b78fc6a740f)  
-*Figure 7.8 – Message received by the workflow via webhook*
+![](https://github.com/user-attachments/assets/61830bd1-6c2d-49a8-975e-9b78fc6a740f)  
+<img width="571" height="313" alt="Shuffle - Webhook Payload" src="https://github.com/user-attachments/assets/4b3ed8ef-da0a-428e-a7f8-d77a3c79e5e8" />
 
 **Payload Contains:**
 - Subject: Problem: SSH-Bruteforce
@@ -135,13 +130,12 @@ The alert appears in the Problems Dashboard with **High** severity, confirming t
 
 ### 6. Data Normalization
 
-![Shuffle - Python Parse Output](https://github.com/user-attachments/assets/c71e71a9-cc9a-4851-83c9-ef6753b8a6fe)  
-*Figure 7.9 – Structured JSON dictionary generated by the Python parsing node*
+<img width="577" height="417" alt="Shuffle - Python Parse Output" src="https://github.com/user-attachments/assets/a45009f8-16d4-45ba-af8f-e54a9fb5db38" />
 
 **Parsed Data (13 items):**
 ```json
 {
-  "event_id": "1234",
+  "event_id": "1270",
   "problem_name": "SSH-Bruteforce",
   "time": "19:55:31",
   "date": "2026.06.18",
@@ -151,8 +145,8 @@ The alert appears in the Problems Dashboard with **High** severity, confirming t
   "host_id": "10684",
   "host_ip": "192.168.20.151",
   "cpu_usage": "58.69",
-  "inbound_traffic": "N/A",
-  "outbound_traffic": "N/A",
+  "inbound_traffic": "2784",
+  "outbound_traffic": "3904",
   "info_url": "https://attack.mitre.org/techniques/T1110/"
 }
 ```
@@ -163,18 +157,15 @@ The alert appears in the Problems Dashboard with **High** severity, confirming t
 
 ### API Response
 
-![Jira API - Ticket Created](https://github.com/user-attachments/assets/1e25132a-12a4-4265-84e8-e7a5b192fcb5)  
-*Figure 7.10 – Jira API response validating automatic incident ticket creation*
+<img width="477" height="274" alt="Jira API - Ticket Created" src="https://github.com/user-attachments/assets/0fe4f954-c567-4710-b9e3-31de331d2017" />
 
 **Response Details:**
 - **Status:** 201 Created
-- **Ticket ID:** `11067`
-- **Ticket Key:** `SOC-96`
 
 ### Jira Ticket View
 
-![Jira Ticket - Internal SSH Threat](https://github.com/user-attachments/assets/6d89a606-bf0c-4c05-9c51-1882cbfb55d5)  
-*Figure 7.11 – Jira ticket containing detailed alert information*
+<img width="508" height="331" alt="Jira Ticket - Internal SSH Threat" src="https://github.com/user-attachments/assets/237bde5c-477f-4413-9988-15ca062a06ec" />
+
 
 **Ticket Details:**
 - **Title:** [INTERNAL THREAT] SSH-Bruteforce
@@ -192,13 +183,13 @@ The alert appears in the Problems Dashboard with **High** severity, confirming t
 
 ### API Response
 
-![Slack API - Notification Delivered](https://github.com/user-attachments/assets/b95aab87-2760-4529-9451-3627f3bdc139)  
-*Figure 7.12 – Slack API response confirming notification delivery*
+<img width="452" height="328" alt="Slack API - Notification Delivered" src="https://github.com/user-attachments/assets/8201db5d-8ebc-4cf0-91d1-f9c4c86d8dcb" />
+
 
 ### Slack Alert Card
 
-![Slack - Internal Threat Notification Card](https://github.com/user-attachments/assets/685a75a8-7898-48ac-ba13-9f7e802f0c32)  
-*Figure 7.13 – Enriched notification card received in real-time on the SOC Slack channel*
+<img width="515" height="193" alt="Slack - Internal Threat Notification Card" src="https://github.com/user-attachments/assets/1c130780-b0d0-4e0a-bf71-670163bc27d4" />
+
 
 **Notification Content:**
 - **Title:** Zabbix Alert - Intern Threat
@@ -219,7 +210,7 @@ The alert appears in the Problems Dashboard with **High** severity, confirming t
 | 2. Ingestion | Webhook (Zabbix → Shuffle) | ✅ Success | Payload sent |
 | 3. Normalization | Python ParseToJSON | ✅ Success | JSON structured |
 | 4. Classification | IP Type Detection | ✅ Success | Identified as Internal |
-| 5. Ticketing | Jira API | ✅ Success | Ticket SOC-96 created |
+| 5. Ticketing | Jira API | ✅ Success | Ticket created |
 | 6. Notification | Slack API | ✅ Success | Alert sent to SOC team |
 | 7. Blocking | pfSense | ⛔ Skipped | No blocking (internal IP) |
 
