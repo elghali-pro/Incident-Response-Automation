@@ -19,7 +19,7 @@ This scenario simulates a **network reconnaissance attack (port scanning)** orig
 | **Attack Vector** | TCP Port Scanning (Reconnaissance) |
 | **MITRE Technique** | T1046 - Network Service Discovery |
 | **Attacker IP** | `192.168.194.190` (Kali Linux) |
-| **Target IP** | `192.168.194.189` (pfSense Firewall) |
+| **Target IP** | `192.168.194.189 (WAN)` (pfSense Firewall) |
 | **Target Hostname** | `pfSense-FW` |
 | **Scan Type** | SYN Stealth Scan (-sS) |
 | **Attack Command** | `nmap -sS -Pn -A -T4 -p 1-2000 192.168.194.189` |
@@ -37,13 +37,12 @@ Snort is installed and configured on pfSense with:
 - **Sensitivity:** Medium (balanced for enterprise environment)
 - **Alert Logs:** Stored in `/var/log/snort/snort_vtnet1.20*/alert`
 
-![Snort Interfaces - Active Monitoring](https://github.com/user-attachments/assets/8b3b5f0f-2b12-41dc-8beb-2f7e1cf6e49b)  
-*Figure 6.14 – Snort activation on WAN and CLIENTS interfaces*
+<img width="943" height="282" alt="Snort Interfaces - Active Monitoring" src="https://github.com/user-attachments/assets/d7575bd1-11bb-42e5-a90d-1ac3843efccf" />
 
 ### Low-Level Discovery (LLD) for Snort Logs
 
-![Zabbix LLD - Snort Log Directory Discovery](https://github.com/user-attachments/assets/9c3a0d20-8f9e-4194-b616-ffcc19cafecb)  
-*Figure 6.23 – Zabbix rule for discovering Snort log directories*
+<img width="1272" height="832" alt="Zabbix LLD - Snort Log Directory Discovery" src="https://github.com/user-attachments/assets/0a524432-2c55-4ae4-8e9c-74592f1f119c" />
+
 
 **Discovery Configuration:**
 - **Rule Name:** Snort Logs Directories
@@ -54,8 +53,8 @@ Snort is installed and configured on pfSense with:
 
 ### Item: Scan Detection
 
-![Zabbix Item - Snort Scan Log Monitoring](https://github.com/user-attachments/assets/cf7ca3fa-7a84-4a55-88eb-3a135ba93f7b)  
-*Figure 7.14 – Configuration of the item monitoring Snort port scan events*
+<img width="844" height="441" alt="Zabbix Item - Snort Scan Log Monitoring" src="https://github.com/user-attachments/assets/0c548104-4520-43a6-89d5-88d4f08fa4f3" />
+
 
 **Item Configuration:**
 - **Type:** Zabbix Agent (Active)
@@ -65,8 +64,7 @@ Snort is installed and configured on pfSense with:
 
 ### RegEx Pre-processing
 
-![Zabbix Preprocessing - Attacker IP Extraction](https://github.com/user-attachments/assets/2b1aa395-9074-4f05-a506-bb01f31e1763)  
-*Figure 7.15 – Regular expression configuration for extracting attacker IP*
+<img width="840" height="241" alt="Zabbix Preprocessing - Attacker IP Extraction" src="https://github.com/user-attachments/assets/8ee6e1be-7a0a-412f-9ea3-92b7f080b040" />
 
 **RegEx Pattern:** Extracts source IP from Snort scan logs:
 ```
@@ -75,8 +73,8 @@ TCP\s+([\d.]+):\d+\s+->\s+[\d.]+:\d+
 
 ### Trigger: Network-Port-Scan
 
-![Zabbix Trigger - Network Port Scan](https://github.com/user-attachments/assets/25c80c04-13a0-4f81-a6e5-82f54e5874fa)  
-*Figure 7.16 – Configuration of the port scan trigger*
+<img width="844" height="439" alt="Zabbix Trigger - Network Port Scan" src="https://github.com/user-attachments/assets/ed37e4d0-3df1-47dc-b12e-3b98181bbacd" />
+
 
 **Trigger Properties:**
 - **Name:** Network-Port-Scan
@@ -90,8 +88,7 @@ TCP\s+([\d.]+):\d+\s+->\s+[\d.]+:\d+
 
 ### Execution from Kali Linux
 
-![Kali Linux - Nmap Port Scan](https://github.com/user-attachments/assets/674a9993-61c1-49a4-b99f-b9f5d662d6f3)  
-*Figure 7.17 – Kali Linux terminal illustrating Nmap reconnaissance scan*
+<img width="519" height="144" alt="Kali Linux - Nmap Port Scan" src="https://github.com/user-attachments/assets/aa9f5f22-9f60-4b35-b385-0c2adc8ffc7e" />
 
 ```bash
 nmap -sS -Pn -A -T4 -p 1-2000 192.168.194.189
@@ -111,15 +108,15 @@ nmap -sS -Pn -A -T4 -p 1-2000 192.168.194.189
 
 ### 1. Alert Generation
 
-![Zabbix Dashboard - Port Scan Alert](https://github.com/user-attachments/assets/856afb67-a78b-4828-aac4-f3ad21893f2b)  
-*Figure 7.18 – Port scan alert captured and displayed on Zabbix console*
+<img width="991" height="472" alt="Zabbix Dashboard - Port Scan Alert" src="https://github.com/user-attachments/assets/43d43f6d-06d5-40e9-ba93-ae66673923b8" />
+
 
 The alert appears in the Problems Dashboard with **High** severity, confirming the Network-Port-Scan detection on host `pfSense-FW`.
 
 ### 2. Webhook Transmission
 
-![Zabbix Action Log - Scan Webhook Sent](https://github.com/user-attachments/assets/68ec123a-b88c-47fe-bb4e-2a34910fbf15)  
-*Figure 7.19 – Zabbix action log confirming scan webhook transmission*
+<img width="988" height="428" alt="Zabbix Action Log - Scan Webhook Sent" src="https://github.com/user-attachments/assets/aaeaf30d-bd96-4054-985b-1ff6916f4ca1" />
+
 
 **Action Log Details:**
 - **Status:** Sent ✓
@@ -130,8 +127,8 @@ The alert appears in the Problems Dashboard with **High** severity, confirming t
 
 ### 3. Shuffle Workflow Execution
 
-![Shuffle Workflow - Port Scan Processing](https://github.com/user-attachments/assets/499d6dd2-d97c-4f8f-9703-8bef3faac7fe)  
-*Figure 7.20 – Shuffle workflow execution triggered during port scan*
+<img width="1176" height="912" alt="Shuffle Workflow - Port Scan Processing" src="https://github.com/user-attachments/assets/b4677043-613a-418a-b27e-51804dc0f7a0" />
+
 
 **Workflow Path:**
 1. Entry Node (Webhook) → Received ✓
@@ -144,8 +141,8 @@ The alert appears in the Problems Dashboard with **High** severity, confirming t
 
 ### 4. Execution Status
 
-![Shuffle - Execution History](https://github.com/user-attachments/assets/5619d887-267b-4375-858c-12a9b599c1ba)  
-*Figure 7.21 – Completed workflow execution status in Shuffle history*
+<img width="850" height="235" alt="Shuffle - Execution History" src="https://github.com/user-attachments/assets/06a4534c-0f91-4e10-89ee-5ae051db2431" />
+
 
 **Execution Metrics:**
 - **Status:** FINISHED ✓
@@ -154,8 +151,7 @@ The alert appears in the Problems Dashboard with **High** severity, confirming t
 
 ### 5. Raw Payload Reception
 
-![Shuffle - Scan Payload](https://github.com/user-attachments/assets/d987981c-f89d-4c3e-82f1-d7df9234a60d)  
-*Figure 7.22 – JSON payload of the port scan incident received on Shuffle webhook*
+<img width="712" height="397" alt="Shuffle - Scan Payload" src="https://github.com/user-attachments/assets/ffbc340b-cacb-4cd1-b251-055aeff44012" />
 
 **Payload Contains:**
 - Problem: Network-Port-Scan
@@ -166,8 +162,8 @@ The alert appears in the Problems Dashboard with **High** severity, confirming t
 
 ### 6. Data Normalization
 
-![Shuffle - Parse Output](https://github.com/user-attachments/assets/c3b43f44-94e8-4d48-91d6-944a39c08751)  
-*Figure 7.23 – Information extraction via the data processing node*
+<img width="702" height="522" alt="Shuffle - Parse Output" src="https://github.com/user-attachments/assets/b1ceeb90-8519-4977-9355-e084ab54c88d" />
+
 
 **Parsed Data:**
 ```json
@@ -194,17 +190,15 @@ The alert appears in the Problems Dashboard with **High** severity, confirming t
 
 ### API Response
 
-![Jira API - Scan Ticket Created](https://github.com/user-attachments/assets/00b6f56e-82b6-4ac0-9aa2-c0d28f22a1c8)  
-*Figure 7.24 – Jira API response confirming the creation of the scan incident ticket*
+<img width="492" height="308" alt="Jira API - Scan Ticket Created" src="https://github.com/user-attachments/assets/0bc157b1-0cad-4f2a-9d43-439d046c95fc" />
 
 **Response Details:**
 - **Status:** 201 Created
-- **Ticket Key:** `SOC-98`
 
 ### Jira Ticket View
 
-![Jira Ticket - Port Scan Internal Threat](https://github.com/user-attachments/assets/8ec277ec-f78c-4870-a3a2-9e8e84c04177)  
-*Figure 7.25 – Jira interface showing the generated port scan incident ticket*
+<img width="507" height="330" alt="Jira Ticket - Port Scan Internal Threat" src="https://github.com/user-attachments/assets/f087a1dc-405f-4147-9d3d-cdd0af3cf49a" />
+
 
 **Ticket Details:**
 - **Title:** [INTERNAL THREAT] Network-Port-Scan
@@ -222,13 +216,11 @@ The alert appears in the Problems Dashboard with **High** severity, confirming t
 
 ### API Response
 
-![Slack API - Scan Notification Delivered](https://github.com/user-attachments/assets/111713ab-6b08-42eb-9156-9eb7a02666f0)  
-*Figure 7.26 – Slack API response confirming scan notification delivery*
+<img width="515" height="191" alt="Slack API - Scan Notification Delivered" src="https://github.com/user-attachments/assets/00de7cd8-56c7-4152-9117-d7bc14554daf" />
 
 ### Slack Alert Card
 
-![Slack - Port Scan Notification Card](https://github.com/user-attachments/assets/8cb7a47c-b27e-4cf1-95ac-ed51d9fe8d6a)  
-*Figure 7.27 – Alert card received in real-time on the SOC Slack channel*
+<img width="424" height="271" alt="Slack - Port Scan Notification Card" src="https://github.com/user-attachments/assets/8b28c31c-41fa-4427-81f2-a87696f01955" />
 
 **Notification Content:**
 - **Title:** Zabbix Alert - Intern Threat
@@ -236,7 +228,7 @@ The alert appears in the Problems Dashboard with **High** severity, confirming t
 - **Host:** `pfSense-FW` (`192.168.10.100`)
 - **Alert:** Network-Port-Scan at 10:51:04
 - **MITRE Link:** Direct URL to T1046
-- **Jira Ticket:** SOC-98 with direct link
+- **Jira Ticket:** with direct link
 - **Action Required:** Manual investigation
 
 ---
@@ -250,7 +242,7 @@ The alert appears in the Problems Dashboard with **High** severity, confirming t
 | 3. Ingestion | Webhook (Zabbix → Shuffle) | ✅ Success | Payload sent |
 | 4. Normalization | Python ParseToJSON | ✅ Success | JSON structured |
 | 5. Classification | IP Type Detection | ✅ Success | Identified as Internal |
-| 6. Ticketing | Jira API | ✅ Success | Ticket SOC-98 created |
+| 6. Ticketing | Jira API | ✅ Success | Ticket created |
 | 7. Notification | Slack API | ✅ Success | Alert sent to SOC team |
 | 8. Blocking | pfSense | ⛔ Skipped | No blocking (internal scan) |
 
@@ -260,8 +252,7 @@ The alert appears in the Problems Dashboard with **High** severity, confirming t
 
 ### Portscan Detection Settings
 
-![Snort - Portscan Detection Configuration](https://github.com/user-attachments/assets/52154bb9-29d8-4d9c-95d7-2dba31fa9256)  
-*Figure 6.16 – Activation of port scan detection in Snort*
+<img width="1325" height="574" alt="Snort - Portscan Detection Configuration" src="https://github.com/user-attachments/assets/16e34f40-cdca-4bec-998d-1f21558790e0" />
 
 **Configuration:**
 - **Protocols:** TCP, UDP, ICMP, IP
@@ -271,8 +262,8 @@ The alert appears in the Problems Dashboard with **High** severity, confirming t
 
 ### Emerging Threats Rules
 
-![Snort - Emerging Threats Rules](https://github.com/user-attachments/assets/c52ebc7b-6a61-450b-8ef6-bc8887a3cd6d)  
-*Figure 6.17 – Activation of Emerging Threats rule categories*
+<img width="1388" height="742" alt="Snort - Emerging Threats Rules" src="https://github.com/user-attachments/assets/12478022-dc6c-4006-8169-748dc0cb3b6b" />
+
 
 **Active Rule Categories:**
 - `emerging-scan.rules`: Offensive tool signatures
@@ -285,8 +276,8 @@ The alert appears in the Problems Dashboard with **High** severity, confirming t
 
 ### Log Directories
 
-![Snort - Log Directory Structure](https://github.com/user-attachments/assets/0e14a30d-68e0-4149-9d1f-16fcc07ae1bc)  
-*Figure 6.15 – Snort log file directory structure*
+<img width="933" height="166" alt="Snort - Log Directory Structure" src="https://github.com/user-attachments/assets/481f6a5d-1024-4304-aaef-005efaad5c06" />
+
 
 **Directory Structure:**
 ```
