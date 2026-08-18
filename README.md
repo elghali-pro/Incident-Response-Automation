@@ -58,7 +58,7 @@ Alerts, raised by **Zabbix** and **Snort**, are automatically parsed, cross-chec
 <td>
 <img src="https://img.shields.io/badge/Python-3776AB?logo=python&logoColor=white">
 <img src="https://img.shields.io/badge/JavaScript-F7DF1E?logo=javascript&logoColor=black">
-</td>
+<img src="https://img.shields.io/badge/PHP-777BB4?logo=php&logoColor=white"></td>
 </tr>
 <tr>
 <td><b>Ticketing & Notifications</b></td>
