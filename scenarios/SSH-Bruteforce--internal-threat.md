@@ -1,0 +1,250 @@
+# Scenario 1: SSH Bruteforce - Internal Threat Detection
+
+## 📌 Overview
+
+This scenario simulates a **dictionary-based SSH bruteforce attack** originating from within the internal network. The attack is detected by Zabbix monitoring the authentication logs, triggering the SOAR pipeline to create a Jira ticket and notify the SOC team via Slack. **No automatic blocking** is applied to prevent self-inflicted DoS on internal infrastructure.
+
+**Threat Type:** Internal (Private IP)  
+**Detection Method:** Zabbix Agent monitoring `/var/log/auth.log`  
+**Response:** Passive (Manual investigation required)  
+**Response Time:** ~6 seconds  
+
+---
+
+## 🎯 Attack Details
+
+| Attribute | Value |
+|-----------|-------|
+| **Attack Tool** | THC-Hydra |
+| **Attack Vector** | SSH Service (Port 22) |
+| **Attacker IP** | `192.168.20.152` (Kali Linux) |
+| **Target IP** | `192.168.20.151` (Ubuntu Server) |
+| **Target Hostname** | `ubuntu-client1` |
+| **Dictionary** | `rockyou.txt` |
+| **Threshold** | >5 failed attempts in 10 seconds |
+| **Attack Command** | `hydra -l client1 -P /usr/share/wordlists/rockyou.txt -t 4 ssh://192.168.20.151` |
+
+---
+
+## 🔧 Zabbix Configuration
+
+### Item: Capture malicious IP from /var/log/auth.log
+
+![Zabbix Item Configuration - Auth Log Monitoring](https://github.com/user-attachments/assets/8c24c5b1-3b71-43ec-adb6-7dc7a5e8f1f5)  
+*Figure 7.1 – Configuration of the item monitoring auth.log*
+
+**Item Configuration:**
+- **Type:** Zabbix Agent (Active)
+- **Key:** `logrt` with RegEx pattern
+- **Purpose:** Extract attacker IP from authentication logs
+- **Update Interval:** 1 second
+
+### Trigger: SSH-Bruteforce Detected
+
+![Zabbix Trigger Configuration - SSH Bruteforce](https://github.com/user-attachments/assets/3b9b74b9-70a8-4bda-906c-889a150745a0)  
+*Figure 7.2 – Configuration of the SSH Bruteforce trigger*
+
+**Trigger Logic:**
+```javascript
+count(//var/log/auth.log, "Failed password", "10s") > 5
+```
+
+**Trigger Properties:**
+- **Name:** SSH-Bruteforce Detected
+- **Severity:** High
+- **Function:** `count()` with RegEx pattern
+- **Condition:** >5 failures in 10 seconds
+
+---
+
+## 💻 Attack Simulation
+
+### Execution from Kali Linux
+
+![Kali Linux - Hydra SSH Bruteforce Attack](https://github.com/user-attachments/assets/43ae7d12-813a-4c9e-9324-8de0cdfc94a5)  
+*Figure 7.3 – Simulation of SSH bruteforce attack with Hydra from Kali Linux*
+
+```bash
+hydra -l client1 -P /usr/share/wordlists/rockyou.txt -t 4 ssh://192.168.20.151
+```
+
+**Command Breakdown:**
+- `-l client1`: Username to test
+- `-P rockyou.txt`: Password dictionary file
+- `-t 4`: 4 parallel connections
+- `ssh://192.168.20.151`: Target SSH service
+
+---
+
+## 🔄 SOAR Pipeline Execution
+
+### 1. Alert Generation
+
+![Zabbix Dashboard - Problem Generation](https://github.com/user-attachments/assets/ef99097c-c054-457d-aa40-75b976daa5f8)  
+*Figure 7.4 – Problem generation in the Zabbix Dashboard*
+
+The alert appears in the Problems Dashboard with **High** severity, confirming the SSH-Bruteforce detection on host `ubuntu-client1`.
+
+### 2. Webhook Transmission
+
+![Zabbix Action Log - Webhook Sent](https://github.com/user-attachments/assets/7a3b6978-fd4f-4433-86e9-dbc334c9dcb1)  
+*Figure 7.5 – Zabbix action log validating webhook transmission to Shuffle*
+
+**Action Log Details:**
+- **Status:** Sent ✓
+- **Type:** Shuffle Media
+- **Event ID:** Captured from trigger
+- **Attacker IP:** `192.168.20.152` (Internal)
+- **MITRE Link:** Included in payload
+
+### 3. Shuffle Workflow Execution
+
+![Shuffle Workflow - Internal Threat Processing](https://github.com/user-attachments/assets/fa8fa6f5-a32b-48cc-a80f-4f59d81ec834)  
+*Figure 7.6 – Real-time Shuffle playbook execution during internal incident*
+
+**Workflow Path:**
+1. Entry Node (Webhook) → Received ✓
+2. Python ParseToJSON → Data normalized ✓
+3. Jira 4 - Confirm Private IP → Branch selected ✓
+4. Slack 4 → Notification sent ✓
+
+**Key Observation:** The workflow bypasses pfSense blocking nodes (upper branch) since the IP is classified as internal.
+
+### 4. Execution Status
+
+![Shuffle - Execution History](https://github.com/user-attachments/assets/e21d4c56-cbc5-4a10-85b3-068e0a6016f6)  
+*Figure 7.7 – Completed workflow execution status in Shuffle history*
+
+**Execution Metrics:**
+- **Status:** FINISHED ✓
+- **Start Time:** 19:55:32
+- **End Time:** 19:56:25
+- **Total Duration:** ~53 seconds (includes human interaction time)
+
+### 5. Raw Payload Reception
+
+![Shuffle - Webhook Payload](https://github.com/user-attachments/assets/61830bd1-6c2d-49a8-975e-9b78fc6a740f)  
+*Figure 7.8 – Message received by the workflow via webhook*
+
+**Payload Contains:**
+- Subject: Problem: SSH-Bruteforce
+- CPU Load: 58.69%
+- Network traffic metrics
+- MITRE ATT&CK URL
+- Complete alert context
+
+### 6. Data Normalization
+
+![Shuffle - Python Parse Output](https://github.com/user-attachments/assets/c71e71a9-cc9a-4851-83c9-ef6753b8a6fe)  
+*Figure 7.9 – Structured JSON dictionary generated by the Python parsing node*
+
+**Parsed Data (13 items):**
+```json
+{
+  "event_id": "1234",
+  "problem_name": "SSH-Bruteforce",
+  "time": "19:55:31",
+  "date": "2026.06.18",
+  "severity": "High",
+  "ioc": "192.168.20.152",
+  "host_name": "ubuntu-client1",
+  "host_id": "10684",
+  "host_ip": "192.168.20.151",
+  "cpu_usage": "58.69",
+  "inbound_traffic": "N/A",
+  "outbound_traffic": "N/A",
+  "info_url": "https://attack.mitre.org/techniques/T1110/"
+}
+```
+
+---
+
+## 📋 Jira Ticket Creation
+
+### API Response
+
+![Jira API - Ticket Created](https://github.com/user-attachments/assets/1e25132a-12a4-4265-84e8-e7a5b192fcb5)  
+*Figure 7.10 – Jira API response validating automatic incident ticket creation*
+
+**Response Details:**
+- **Status:** 201 Created
+- **Ticket ID:** `11067`
+- **Ticket Key:** `SOC-96`
+
+### Jira Ticket View
+
+![Jira Ticket - Internal SSH Threat](https://github.com/user-attachments/assets/6d89a606-bf0c-4c05-9c51-1882cbfb55d5)  
+*Figure 7.11 – Jira ticket containing detailed alert information*
+
+**Ticket Details:**
+- **Title:** [INTERNAL THREAT] SSH-Bruteforce
+- **Priority:** High
+- **Description includes:**
+  - Event ID
+  - Date/Time
+  - CPU and network metrics
+  - MITRE ATT&CK reference
+  - Standardized investigation actions
+
+---
+
+## 💬 Slack Notification
+
+### API Response
+
+![Slack API - Notification Delivered](https://github.com/user-attachments/assets/b95aab87-2760-4529-9451-3627f3bdc139)  
+*Figure 7.12 – Slack API response confirming notification delivery*
+
+### Slack Alert Card
+
+![Slack - Internal Threat Notification Card](https://github.com/user-attachments/assets/685a75a8-7898-48ac-ba13-9f7e802f0c32)  
+*Figure 7.13 – Enriched notification card received in real-time on the SOC Slack channel*
+
+**Notification Content:**
+- **Title:** Zabbix Alert - Intern Threat
+- **IP:** `192.168.20.152` (Internal Network)
+- **Host:** `ubuntu-client1` (`192.168.20.151`)
+- **Alert:** SSH-Bruteforce at 19:55:31
+- **MITRE Link:** Direct URL to T1110
+- **Jira Ticket:** SOC-96 with direct link
+- **Action Required:** Manual investigation
+
+---
+
+## 📊 Summary
+
+| Step | Component | Status | Output |
+|------|-----------|--------|--------|
+| 1. Detection | Zabbix Trigger | ✅ Success | Alert generated |
+| 2. Ingestion | Webhook (Zabbix → Shuffle) | ✅ Success | Payload sent |
+| 3. Normalization | Python ParseToJSON | ✅ Success | JSON structured |
+| 4. Classification | IP Type Detection | ✅ Success | Identified as Internal |
+| 5. Ticketing | Jira API | ✅ Success | Ticket SOC-96 created |
+| 6. Notification | Slack API | ✅ Success | Alert sent to SOC team |
+| 7. Blocking | pfSense | ⛔ Skipped | No blocking (internal IP) |
+
+---
+
+## 🎯 Key Takeaways
+
+1. **Context-Aware Response:** The SOAR correctly identified the IP as internal and avoided automatic blocking that could cause self-DoS.
+
+2. **Comprehensive Triage:** The Jira ticket contains all relevant context for SOC analysts to begin investigation immediately.
+
+3. **Rapid Notification:** The SOC team is alerted in ~6 seconds, significantly faster than manual notification.
+
+4. **MITRE Integration:** The alert includes direct links to ATT&CK techniques for faster threat understanding.
+
+5. **Analyst Empowerment:** Rather than replacing human decision-making, the SOAR augments it by handling repetitive tasks and providing rich context.
+
+---
+
+## 🔗 Related Resources
+
+- [MITRE ATT&CK T1110 - Brute Force](https://attack.mitre.org/techniques/T1110/)
+- [THC-Hydra Documentation](https://github.com/vanhauser-thc/thc-hydra)
+- [Zabbix Log Monitoring Documentation](https://www.zabbix.com/documentation/current/en/manual/config/items/itemtypes/log_items)
+
+---
+
+*This scenario demonstrates the effectiveness of the SOAR pipeline for internal threats, prioritizing investigation and traceability over aggressive automated blocking.*
