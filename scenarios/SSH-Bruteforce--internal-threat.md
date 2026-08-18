@@ -197,7 +197,7 @@ The alert appears in the Problems Dashboard with **High** severity, confirming t
 - **Host:** `ubuntu-client1` (`192.168.20.151`)
 - **Alert:** SSH-Bruteforce at 19:55:31
 - **MITRE Link:** Direct URL to T1110
-- **Jira Ticket:** SOC-96 with direct link
+- **Jira Ticket:** with direct link
 - **Action Required:** Manual investigation
 
 ---
