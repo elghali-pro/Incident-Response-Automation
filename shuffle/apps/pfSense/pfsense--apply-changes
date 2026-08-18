@@ -1,0 +1,4 @@
+{
+  "_comment": "Step 2: Apply and commit changes to pfSense firewall. This activates the blocking rule.",
+  "apply": true
+}

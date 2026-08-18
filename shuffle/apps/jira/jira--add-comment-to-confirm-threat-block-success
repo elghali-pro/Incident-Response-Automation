@@ -1,0 +1,30 @@
+{
+  "body": {
+    "type": "doc",
+    "version": 1,
+    "content": [
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "text": "SECURITY AUTOMATION ALERT: The malicious public IP address ",
+            "type": "text"
+          },
+          {
+            "text": "$parsetojson.message.ioc",
+            "type": "text",
+            "marks": [
+              {
+                "type": "code"
+              }
+            ]
+          },
+          {
+            "text": " has been successfully blocked on the pfSense firewall. This mitigation action was triggered automatically by Shuffle in response to the Zabbix incident.",
+            "type": "text"
+          }
+        ]
+      }
+    ]
+  }
+}

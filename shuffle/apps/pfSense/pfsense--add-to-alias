@@ -1,0 +1,8 @@
+{
+  "_comment": "Step 1: Add malicious IP to pfSense alias. IP will be blocked once changes are applied.",
+  "id": 0,
+  "name": "Shuffle_Blocked_IP",
+  "address": [
+    "$parsetojson.message.ioc"
+  ]
+}

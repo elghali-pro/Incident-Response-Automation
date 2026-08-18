@@ -1,0 +1,12 @@
+{
+  "_comment": "Zabbix API call to automatically close/acknowledge an alert after successful remediation by Shuffle SOAR",
+  "jsonrpc": "2.0",
+  "method": "event.acknowledge",
+  "params": {
+    "eventids": "$parsetojson.message.event_id",
+    "action": 3,
+    "message": "Alert closed automatically by Shuffle SOAR. Malicious IP has been successfully blocked on pfSense firewall."
+  },
+  "auth": "{{ZABBIX_API_TOKEN}}",
+  "id": 1
+}
