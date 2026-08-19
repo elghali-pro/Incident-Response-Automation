@@ -7,7 +7,7 @@ This scenario simulates a **protocol anomaly attack (Protocol Mismatch)** origin
 **Threat Type:** External (Public IP)  
 **Detection Method:** Snort IDS on WAN Interface + Zabbix Agent  
 **Response:** Active (Automatic blocking on pfSense)  
-**Response Time:** < 5 seconds  
+**Response Time:** < 1 minute  
 **MTTR Reduction:** ~93% (from 15 minutes to seconds)
 
 ---
@@ -31,8 +31,8 @@ This scenario simulates a **protocol anomaly attack (Protocol Mismatch)** origin
 
 ### Item: Snort Anomalous Connection Logs
 
-![Zabbix Item - Protocol Anomaly Monitoring](https://github.com/user-attachments/assets/a18cfa50-f1d2-434b-84cc-d9b5348c26a5)  
-*Figure 7.28 – Zabbix item configuration for monitoring Snort protocol anomalies*
+<img width="840" height="442" alt="Zabbix Item - Protocol Anomaly Monitoring" src="https://github.com/user-attachments/assets/45061715-bd2d-45a3-9b31-1fb03d605639" />
+
 
 **Item Configuration:**
 - **Type:** Zabbix Agent (Active)
@@ -43,8 +43,8 @@ This scenario simulates a **protocol anomaly attack (Protocol Mismatch)** origin
 
 ### RegEx Pre-processing for External IP Extraction
 
-![Zabbix Preprocessing - External IP Extraction](https://github.com/user-attachments/assets/2c9a5f3e-7627-4244-99af-ffdc75fa27b1)  
-*Figure 7.29 – Regular expression preprocessing for external IP extraction*
+<img width="844" height="247" alt="Zabbix Preprocessing - External IP Extraction" src="https://github.com/user-attachments/assets/12e56774-1fda-4d00-8189-4604a2c0deeb" />
+
 
 **RegEx Pattern:** Extracts external IP from Snort WAN logs:
 ```
@@ -53,8 +53,8 @@ TCP\s+([\d.]+):\d+\s+->\s+[\d.]+:\d+
 
 ### Trigger: Protocol-Mismatch
 
-![Zabbix Trigger - Protocol Mismatch](https://github.com/user-attachments/assets/9f3c0c63-e1a7-4b1d-b4ae-2b7665e31826)  
-*Figure 7.30 – Logical expression configuration of the protocol anomaly trigger*
+<img width="844" height="438" alt="Zabbix Trigger - Protocol Mismatch" src="https://github.com/user-attachments/assets/1c9792af-d3d5-4d15-855c-7bbec3436d11" />
+
 
 **Trigger Properties:**
 - **Name:** Protocol-Mismatch
@@ -68,15 +68,15 @@ TCP\s+([\d.]+):\d+\s+->\s+[\d.]+:\d+
 
 ### 1. Alert Generation
 
-![Zabbix Dashboard - Protocol Anomaly Alert](https://github.com/user-attachments/assets/63f4e1e0-14e5-4569-81c5-fee5e76e39a5)  
-*Figure 7.31 – WAN protocol anomaly alert displayed on Zabbix console*
+<img width="993" height="471" alt="Zabbix Dashboard - Protocol Anomaly Alert" src="https://github.com/user-attachments/assets/aadcca06-d070-4acd-8a64-30872286a906" />
+
 
 The alert appears in the Problems Dashboard with **High** severity, confirming the Protocol-Mismatch detection on host `pfSense-FW`.
 
 ### 2. Webhook Transmission
 
-![Zabbix Action Log - External Webhook](https://github.com/user-attachments/assets/d5c166bb-8b4f-4ba1-8a55-226b84a78840)  
-*Figure 7.32 – Zabbix action log confirming webhook transmission with external IP*
+<img width="986" height="427" alt="Zabbix Action Log - External Webhook" src="https://github.com/user-attachments/assets/5652de18-1c4d-4129-a1e6-ffe8928f042a" />
+
 
 **Action Log Details:**
 - **Status:** Sent ✓
@@ -86,8 +86,9 @@ The alert appears in the Problems Dashboard with **High** severity, confirming t
 
 ### 3. Shuffle Workflow Execution
 
-![Shuffle Workflow - External Threat Processing](https://github.com/user-attachments/assets/529cb63e-a0c5-4ccc-b9f6-86811c1029a1)  
-*Figure 7.33 – Shuffle workflow execution during external incident*
+<img width="1321" height="619" alt="Shuffle Workflow - External Threat Processing" src="https://github.com/user-attachments/assets/aa9a0536-f105-4df4-9183-c13139459930" />
+
+
 
 **Workflow Path:**
 1. Entry Node (Webhook) → Received ✓
@@ -102,8 +103,8 @@ The alert appears in the Problems Dashboard with **High** severity, confirming t
 
 ### 4. Execution Status
 
-![Shuffle - External Workflow Status](https://github.com/user-attachments/assets/25f079f1-5f3b-49b5-987d-603c5900e539)  
-*Figure 7.34 – Completed external workflow execution status in Shuffle history*
+<img width="817" height="199" alt="Shuffle - External Workflow Status" src="https://github.com/user-attachments/assets/f21e3c0b-cf2b-4b73-85ee-b64a5572e26b" />
+
 
 **Execution Metrics:**
 - **Status:** FINISHED ✓
@@ -112,8 +113,9 @@ The alert appears in the Problems Dashboard with **High** severity, confirming t
 
 ### 5. Raw Payload Reception
 
-![Shuffle - External Payload](https://github.com/user-attachments/assets/2e0195df-2f48-45b5-9752-999fd261292c)  
-*Figure 7.35 – JSON payload of the external incident received on Shuffle webhook*
+<img width="708" height="405" alt="Shuffle - External Payload" src="https://github.com/user-attachments/assets/61d5c8f0-84bb-443a-be92-5cd2c79b9d67" />
+
+
 
 **Payload Contains:**
 - Problem: Protocol-Mismatch
@@ -124,8 +126,8 @@ The alert appears in the Problems Dashboard with **High** severity, confirming t
 
 ### 6. Data Normalization
 
-![Shuffle - Parse Output External](https://github.com/user-attachments/assets/7ae4d90f-1201-4f83-aa32-8f1b1cddff61)  
-*Figure 7.36 – Variables extracted and normalized by the Python ParseToJSON node*
+<img width="712" height="519" alt="Shuffle - Parse Output External" src="https://github.com/user-attachments/assets/58c60924-a02c-4616-b861-286160f83a92" />
+
 
 **Parsed Data:**
 ```json
@@ -152,8 +154,8 @@ The alert appears in the Problems Dashboard with **High** severity, confirming t
 
 ### VirusTotal API Response
 
-![VirusTotal - Malicious IP Confirmation](https://github.com/user-attachments/assets/dc28e55f-9f71-4b22-89a8-78a5dc6a07c0)  
-*Figure 7.37 – VirusTotal API response validating malicious score and negative reputation*
+<img width="936" height="487" alt="VirusTotal - Malicious IP Confirmation" src="https://github.com/user-attachments/assets/afce6a07-67be-4f03-a0be-e41743baeca7" />
+
 
 **VirusTotal Results:**
 ```
@@ -180,17 +182,18 @@ The alert appears in the Problems Dashboard with **High** severity, confirming t
 
 ### API Response
 
-![Jira API - External Ticket Created](https://github.com/user-attachments/assets/cb97bb00-0439-4297-a0d1-115e38090e28)  
-*Figure 7.38 – Jira node execution confirming ticket creation*
+<img width="403" height="173" alt="Jira API - External Ticket Created" src="https://github.com/user-attachments/assets/8d2aa222-3c6a-4365-8caf-34c8027958f3" />
+
+
 
 **Response Details:**
 - **Status:** 201 Created
-- **Ticket Key:** SOC-99
 
 ### Jira Ticket View
 
-![Jira Ticket - External Threat](https://github.com/user-attachments/assets/8204ddf5-c26a-4610-a79e-9ba7a771b33c)  
-*Figure 7.39 – Jira ticket containing complete alert details with threat intelligence*
+<img width="407" height="456" alt="Jira Ticket - External Threat" src="https://github.com/user-attachments/assets/8f9b8d3c-096e-4e62-9b8d-a933c5502883" />
+
+
 
 **Ticket Details:**
 - **Title:** [EXTERNAL THREAT] Protocol-Mismatch
@@ -212,8 +215,8 @@ The alert appears in the Problems Dashboard with **High** severity, confirming t
 
 ### API Response - Block IP
 
-![pfSense API - IP Added to Blacklist](https://github.com/user-attachments/assets/f242b506-78fb-4a30-a3b4-e1ccc01f34b3)  
-*Figure 7.40 – pfSense node execution confirming IP addition to blacklist*
+<img width="709" height="532" alt="pfSense API - IP Added to Blacklist" src="https://github.com/user-attachments/assets/d8a248ec-31d9-4959-b914-c42618358e9a" />
+
 
 **Response Details:**
 - **Status:** 200 OK
@@ -222,8 +225,8 @@ The alert appears in the Problems Dashboard with **High** severity, confirming t
 
 ### API Response - Apply Changes
 
-![pfSense API - Changes Applied](https://github.com/user-attachments/assets/aa5cfa92-38ab-437f-928b-7767128ec6b9)  
-*Figure 7.41 – pfSense node execution confirming application of changes*
+<img width="706" height="507" alt="pfSense API - Changes Applied" src="https://github.com/user-attachments/assets/b817888d-3655-4dcf-a4aa-a96455d9cec5" />
+
 
 **Response Details:**
 - **Status:** 200 OK
@@ -232,8 +235,8 @@ The alert appears in the Problems Dashboard with **High** severity, confirming t
 
 ### pfSense Interface Verification
 
-![pfSense - IP Blocked Confirmation](https://github.com/user-attachments/assets/063ae71a-4564-491c-8e50-d00a0f2b20b0)  
-*Figure 7.42 – pfSense interface view confirming IP banishment within the blocking alias*
+<img width="976" height="280" alt="pfSense - IP Blocked Confirmation" src="https://github.com/user-attachments/assets/ddc8276d-591f-4b8c-ab2a-de593ba0ab59" />
+
 
 **Alias Details:**
 - **Name:** Shuffle_Blocked_IP
@@ -247,13 +250,12 @@ The alert appears in the Problems Dashboard with **High** severity, confirming t
 
 ### Comment Injection
 
-![Jira API - Comment Added](https://github.com/user-attachments/assets/c3db2cb6-afda-466b-89ba-bee529ac8f20)  
-*Figure 7.43 – Jira API response confirming automatic technical comment injection*
+<img width="383" height="274" alt="Jira API - Comment Added" src="https://github.com/user-attachments/assets/1d42a8e4-198f-4b0f-b02a-e6805e79a362" />
 
 ### Jira Comment View
 
-![Jira - Technical Comment](https://github.com/user-attachments/assets/ffd4af68-7915-4058-b326-1bd4a50fdeac)  
-*Figure 7.44 – Comment added to the Jira ticket*
+<img width="1153" height="291" alt="Jira - Technical Comment" src="https://github.com/user-attachments/assets/81dedfc4-9e1f-4abe-b022-eb288590b731" />
+
 
 **Comment Content:**
 - Confirmation of automatic blocking
@@ -262,13 +264,13 @@ The alert appears in the Problems Dashboard with **High** severity, confirming t
 
 ### Transition to Completed Status
 
-![Jira API - Status Transition](https://github.com/user-attachments/assets/175ad45c-0750-4d6b-8158-2786f966c5e7)  
-*Figure 7.45 – Jira API response validating successful ticket state transition*
+<img width="418" height="200" alt="Jira API - Status Transition" src="https://github.com/user-attachments/assets/566d56ca-4319-42cc-9c1b-f932d7b85006" />
+
 
 ### Completed Ticket View
 
-![Jira - Completed Ticket](https://github.com/user-attachments/assets/0f265d79-0279-45db-a5e1-38a8b506cebb)  
-*Figure 7.46 – Jira interface showing ticket closure and "Completed" status*
+<img width="642" height="646" alt="Jira - Completed Ticket" src="https://github.com/user-attachments/assets/7446347c-8faf-4151-a3e1-94a94b5364b2" />
+
 
 **Ticket Final Status:**
 - **Status:** Completed ✓
@@ -281,8 +283,8 @@ The alert appears in the Problems Dashboard with **High** severity, confirming t
 
 ### API Response - Close Alert
 
-![Zabbix API - Alert Closed](https://github.com/user-attachments/assets/31b36993-4d8b-44fe-8c80-8aa06574c776)  
-*Figure 7.47 – Zabbix API response confirming remote alert closure*
+<img width="406" height="251" alt="Zabbix API - Alert Closed" src="https://github.com/user-attachments/assets/be42b807-a656-4014-bb33-82f85621813c" />
+
 
 **Response Details:**
 - **Status:** 200 OK
@@ -291,8 +293,8 @@ The alert appears in the Problems Dashboard with **High** severity, confirming t
 
 ### Zabbix Console - Resolved Status
 
-![Zabbix - Alert Resolved](https://github.com/user-attachments/assets/dae7b821-2ed2-4e9e-9276-01bda0485d9e)  
-*Figure 7.48 – Zabbix interface confirming alert status changed to "RESOLVED" by API*
+<img width="985" height="469" alt="Zabbix - Alert Resolved" src="https://github.com/user-attachments/assets/cfc1fe74-70a6-4fc3-9171-8c6ba4261a49" />
+
 
 **Status Update:**
 - **Previous:** Active (High)
@@ -305,13 +307,13 @@ The alert appears in the Problems Dashboard with **High** severity, confirming t
 
 ### API Response
 
-![Slack API - Closure Notification Sent](https://github.com/user-attachments/assets/516ba1f7-0bde-464f-817b-0d0d357b7bda)  
-*Figure 7.49 – Slack API response validating closure notification delivery*
+<img width="379" height="271" alt="Slack API - Closure Notification Sent" src="https://github.com/user-attachments/assets/d540c05c-54b5-42e2-be66-dcce53716c14" />
+
 
 ### Slack Final Alert Card
 
-![Slack - External Threat Closure](https://github.com/user-attachments/assets/2d95bb70-a45a-4647-92a6-f15e239c2b60)  
-*Figure 7.50 – Closure notification content received on Slack channel*
+<img width="422" height="146" alt="Slack - External Threat Closure" src="https://github.com/user-attachments/assets/716c18bc-3a12-4d08-8eb7-d95f62472267" />
+
 
 **Notification Content:**
 - **Title:** Zabbix Alert - External Malicious Threat
@@ -319,7 +321,7 @@ The alert appears in the Problems Dashboard with **High** severity, confirming t
 - **Host:** `pfSense-FW` (`192.168.10.100`)
 - **Alert:** Protocol-Mismatch at 11:07:13
 - **MITRE Link:** Direct URL to T1571
-- **Jira Ticket:** SOC-99 (Completed)
+- **Jira Ticket:**  (Completed)
 - **Status:** ✅ Fully mitigated
 
 ---
@@ -336,7 +338,7 @@ The alert appears in the Problems Dashboard with **High** severity, confirming t
 | 6. Enrichment | VirusTotal API | ✅ Success | Malicious score confirmed |
 | 7. Remediation | pfSense - Block IP | ✅ Success | IP added to alias |
 | 8. Apply Changes | pfSense - Apply Action | ✅ Success | Firewall rules reloaded |
-| 9. Ticketing | Jira API | ✅ Success | Ticket SOC-99 created |
+| 9. Ticketing | Jira API | ✅ Success | Ticket created |
 | 10. Comment | Jira API | ✅ Success | Technical comment added |
 | 11. Transition | Jira API | ✅ Success | Status set to Completed |
 | 12. Alert Closure | Zabbix API | ✅ Success | Alert resolved |
@@ -350,8 +352,8 @@ The alert appears in the Problems Dashboard with **High** severity, confirming t
 |--------|-----------------|------------------|-------------|
 | Detection Time | ~1 minute | ~1 second | ~98% faster |
 | Analysis Time | ~5 minutes | ~1 second | ~99% faster |
-| Remediation Time | ~9 minutes | ~2 seconds | ~99% faster |
-| Total MTTR | ~15 minutes | **< 5 seconds** | **~93% faster** |
+| Remediation Time | ~9 minutes | ~30 second | ~99% faster |
+| Total MTTR | ~15 minutes | **52 s (< 1 min)** | **~93% faster** |
 
 ---
 
@@ -382,4 +384,4 @@ The alert appears in the Problems Dashboard with **High** severity, confirming t
 
 ---
 
-*This scenario demonstrates the full capabilities of the SOAR pipeline, showcasing how the system autonomously detects, enriches, remediates, and documents external threats—reducing MTTR from 15 minutes to under 5 seconds while providing complete audit trails and immediate SOC team notification.*
+*This scenario demonstrates the full capabilities of the SOAR pipeline, showcasing how the system autonomously detects, enriches, remediates, and documents external threats—reducing MTTR from 15 minutes to under 1 minute while providing complete audit trails and immediate SOC team notification.*
